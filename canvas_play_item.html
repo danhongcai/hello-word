@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>canvas_play_item</title>
+	<style>
+		.canvas {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 2;
+		}
+	</style>
+</head>
+
+<body>
+	<canvas class="canvas" id="canvas" width="750" height="1633"></canvas>
+
+	<script src="https://image.gaeamobile.net/javascript/20180419/115447/jquery.min.js"></script>
+	<script>
+		// 序列帧在canvas上的播放
+		let config = {
+			total: 78, //总数 即 0~77
+			baseUrl: 'https://infiniti.opentide.com.cn/qx50/wap/images/01/', //加载图片地址拼接规则
+			imgType: '.jpg', // 图片格式，.png，.jpg
+			tragetDom: 'canvas', // 目标canvas的id
+		}
+		SeqImgIndexB(config);
+
+		function SeqImgIndexB(args) {
+			let imgArr = [],
+				srcArr = [],
+				curCount = 0;
+			for (var i = 0; i < args.total; i++) {
+				let url = args.baseUrl + i + args.imgType;
+				let oImg = new Image();
+
+				imgArr.push(oImg);
+				srcArr.push(url);
+			}
+
+			imgArr.forEach(function(imgItem, i) {
+				imgItem.src = srcArr[i];
+
+				imgItem.onload = function() {
+					curCount++;
+					if (curCount == srcArr.length) {
+						playCanvas();
+					}
+				}
+			});
+
+			function playCanvas() {
+				let oCanvas = $('#' + args.tragetDom)[0],
+					cxt = oCanvas.getContext("2d"),
+					playIndex = 0,
+					aniTimer = null;
+
+				aniTimer = setInterval(function() {
+					playIndex++;
+					if (playIndex == srcArr.length - 1) {
+						// 播完了
+						playIndex = 0;
+						clearInterval(aniTimer);
+					}
+					cxt.drawImage(imgArr[playIndex], 0, 0, oCanvas.width, oCanvas.height);
+				}, 50);
+			}
+		}
+	</script>
+</body>
+
+</html>

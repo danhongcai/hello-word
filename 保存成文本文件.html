@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <title></title>
+    <link href="https://image.gaeamobile.net/css/20180419/114842/common_p.css" rel="stylesheet" />
+</head>
+
+<body>
+    <a id="Download" download="000.txt">来下载啊</a>
+    <a id="Download2">来下载啊</a>
+    <script src="https://image.gaeamobile.net/javascript/20180419/115447/jquery.min.js"></script>
+    <script>
+        // 方式一：
+        // var file1 = new File(["text1", "text2"], "test.txt", {
+        //     type: "text/plain"
+        // });
+        let a = ["text1", "text2"];
+        let saveFile = function (fileText) {
+            let DownloadDom = document.getElementById("Download");
+            if (DownloadDom) {
+                let myBlob = new Blob([fileText], {
+                    type: "application/plain"
+                });
+                // let myBlob = new Blob(['{"hello":"world"}'], {
+                //     type: "application/json"
+                // });
+                DownloadDom.href = window.URL.createObjectURL(myBlob);
+                console.log("下载文件已就绪");
+            }
+        };
+        saveFile(a); // 注释:点击页面才下载
+
+        // 方式二：
+        var blob = new Blob(['{"hello":"world"}'], {
+            type: "application/json"
+        });
+        const openDownloadDialog = (url, saveName) => {
+            if (typeof url === "object" && url instanceof Blob) {
+                url = URL.createObjectURL(url); // 创建blob地址
+            }
+            const aLink = document.getElementById("Download2");
+            // const aLink = document.createElement("a");
+            aLink.href = url;
+            aLink.download = saveName;
+            aLink.click();
+        };
+
+        // openDownloadDialog(blob, "cdh20190506.json");
+    </script>
+</body>
+
+</html>
